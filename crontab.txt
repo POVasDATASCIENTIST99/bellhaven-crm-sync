@@ -1,0 +1,4 @@
+# The same daily schedule as a plain cron entry (Linux or Mac).
+# 06:00 every day: scrape, match, refresh the review queue. It writes nothing to the CRM.
+# Put the token in a private file, for example ~/.bh_env containing:  export BH_TOKEN="..."
+0 6 * * * . $HOME/.bh_env && cd /path/to/bellhaven_sync && python3 sync.py run >> data/cron.log 2>&1
