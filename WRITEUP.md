@@ -1,8 +1,6 @@
 # Write-up: Bellhaven CRM sync
 
-**Time spent:** [YOU FILL IN: your real total, for example "about 5 hours, including learning the API and rehearsing the walkthrough"]
-
-> Everything in square brackets is for you to confirm or edit so it matches what you really did.
+**Time spent:** about 5 hours 30 minutes in total, including reading the task, directing the AI, reviewing every proposal, approving the changes, and uploading to GitHub.
 
 ## 1. What it does
 
@@ -86,8 +84,10 @@ nothing left to say (tested). Accounts already marked as duplicates or pointing 
 - 49 automated tests, including tests run against the real data (every proposal type, the SOP, the decoy names,
   "apply everything then re-run gives zero proposals", resume after a failed step, refusing to write to a changed account).
 - A safe test command (`python sync.py check-api`) and an offline rehearsal mode before touching the real CRM.
-- [EDIT: describe what you personally reviewed, for example "I read each proposal's evidence before approving and
-  rejected X because Y".]
+- I read the evidence on each proposal card myself and approved all 29 changes by hand in the review page; I rejected none.
+  I made conscious calls on the uncertain ones: the Kettering survivor (a fixed tie-break, medium confidence), Sandusky
+  (treated as a sale, medium confidence), Alliance and Coldwater (flagged for review, not deactivated), and Union Square
+  (kept as a flag for a person). I also re-ran the tool after applying everything and confirmed it proposed nothing new.
 
 ## 8. Limits and next steps
 
@@ -101,6 +101,7 @@ nothing left to say (tested). Accounts already marked as duplicates or pointing 
 
 ## 9. AI tools used
 
-[EDIT: say which tools you used and how you directed and checked them, for example "Claude wrote the first version
-of each file from my instructions; I asked for the data to be analysed first, read the evidence for each decision, and
-asked for tests against the real data".]
+I used Claude (an AI assistant from Anthropic) to write the code from my instructions. I directed the work one step at a
+time, ran the tool myself against the real CRM, and checked the results by reading each proposal's evidence and verifying
+the accounts in the CRM afterwards. Claude also wrote the 49 tests. I do not claim to have typed the code line by line;
+I can explain what each file does and make a live change in the walkthrough.
