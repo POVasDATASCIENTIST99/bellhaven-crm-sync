@@ -1,0 +1,48 @@
+# Runs the pipeline every day. It scrapes the website, reads the CRM and refreshes the
+# review queue. It NEVER writes to the CRM: a person approves changes in the review app.
+name: bellhaven-daily-sync
+
+on:
+  schedule:
+    - cron: "0 6 * * *"      # every day at 06:00 UTC
+  workflow_dispatch: {}      # also lets you run it by hand from the Actions tab
+
+jobs:
+  propose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The decision ledger is what stops already-decided items from coming back.
+      # Actions runners start empty every time, so we save and restore it.
+      - name: Restore decision ledger
+        uses: actions/cache/restore@v4
+        with:
+          path: data/decisions.json
+          key: ledger-${{ github.run_id }}
+          restore-keys: ledger-
+
+      - name: Run the tests first (stop if the code is broken)
+        run: python -m unittest discover -s tests
+
+      - name: Scrape, match, refresh the review queue
+        env:
+          BH_TOKEN: ${{ secrets.BH_TOKEN }}     # stored in the repo's secrets, never in the code
+        run: python sync.py run
+
+      - name: Save decision ledger
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/decisions.json
+          key: ledger-${{ github.run_id }}
+
+      - name: Keep a copy of the queue
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-queue
+          path: data/decisions.json
